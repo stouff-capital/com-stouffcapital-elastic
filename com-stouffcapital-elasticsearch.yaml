@@ -14,17 +14,17 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: "64m"
     nginx.org/proxy-connect-timeout: "300s"
     nginx.org/proxy-read-timeout: "120s"
-    nginx.org/client-max-body-size: "64m
+    nginx.org/client-max-body-size: "64m"
 spec:
   tls:
   - hosts:
-    - elastic.stouffcapital.com
-    secretName: elastic-stouffcapital-service-tls
+    - elasticsearch.stouffcapital.com
+    secretName: elasticsearch-stouffcapital-service-tls
   backend:
     serviceName: default-http-backend
     servicePort: 80
   rules:
-  - host: elastic.stouffcapital.com
+  - host: elasticsearch.stouffcapital.com
     http:
       paths:
       - path: /

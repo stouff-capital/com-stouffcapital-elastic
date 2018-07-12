@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: elastic-kibana
+  labels:
+    app: elastic
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: elastic
+        tier: kibana
+    spec:
+      containers:
+      - image: docker.elastic.co/kibana/kibana:6.3.1
+        name: kibana
+        env:
+        ports:
+        - containerPort: 5601
+          name: kibana
+

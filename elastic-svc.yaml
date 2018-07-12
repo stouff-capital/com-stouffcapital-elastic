@@ -11,3 +11,18 @@ spec:
     app: elastic
     tier: elasticsearch
   clusterIP: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  labels:
+    app: elastic
+spec:
+  ports:
+  - port: 5601
+  selector:
+    app: elastic
+    tier: kibana
+  clusterIP: None
+---
