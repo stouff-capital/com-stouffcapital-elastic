@@ -1,0 +1,43 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: elastic-elasticsearch
+  labels:
+    app: elastic
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: elastic
+        tier: elasticsearch
+    spec:
+      initContainers:
+      - name: init-sysctl-and-volumemount-hack
+        image: busybox
+        command: ['sh', '-c']
+        args: ["sysctl -w vm.max_map_count=26214; chmod 777 /usr/share/elasticsearch/data"]
+        volumeMounts:
+        - name: elastic-elasticsearch-persistent-storage
+          mountPath: /usr/share/elasticsearch/data
+      containers:
+      - image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+        name: elasticsearch
+        env:
+        - name: ES_JAVA_OPTS
+          value: -Xms2g -Xmx2g
+        - name: bootstrap.memory_lock
+          value: "true"
+        - name: discovery.type
+          value: single-node
+        ports:
+        - containerPort: 9200
+          name: elasticsearch
+        volumeMounts:
+        - name: elastic-elasticsearch-persistent-storage
+          mountPath: /usr/share/elasticsearch/data
+      volumes:
+      - name: elastic-elasticsearch-persistent-storage
+        persistentVolumeClaim:
+          claimName: elastic-elasticsearch-pv-claim
