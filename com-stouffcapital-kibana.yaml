@@ -4,17 +4,20 @@ metadata:
   name: ingress-kibana-with-auth
   annotations:
     # type of authentication
-    ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-type: basic
     # name of the secret that contains the user/password definitions
-    ingress.kubernetes.io/auth-secret: elastic
+    nginx.ingress.kubernetes.io/auth-secret: elastic
     # message to display with an appropiate context why the authentication is required
-    ingress.kubernetes.io/auth-realm: "Authentication Required - elastic"
-    kubernetes.io/tls-acme: "true" # enable certificates
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required - elastic"
+
+    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    certmanager.k8s.io/issuer: letsencrypt-prod
     kubernetes.io/ingress.class: "nginx"
-    ingress.kubernetes.io/proxy-body-size: "64m"
-    nginx.org/proxy-connect-timeout: "300s"
-    nginx.org/proxy-read-timeout: "120s"
-    nginx.org/client-max-body-size: "64m"
+
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300s"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120s"
 spec:
   tls:
   - hosts:
